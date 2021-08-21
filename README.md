@@ -1,0 +1,2 @@
+# ParafraseadorSemiAutomatico
+ParafraseadorSemiAutomatico
