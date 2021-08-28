@@ -2,6 +2,7 @@ package gui;
 
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
+import java.awt.SystemColor;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
@@ -23,6 +24,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
+import javax.swing.JTextField;
 import javax.swing.UIManager;
 import javax.swing.border.EmptyBorder;
 import javax.swing.text.BadLocationException;
@@ -68,6 +70,7 @@ public class GUI extends JFrame {
 	private List<String> listaDeLinhas;
 	
 	private String texto;
+	private JTextField txtPalavrasNegativas;
 	
 	public String getTexto() {
 		return texto;
@@ -81,6 +84,10 @@ public class GUI extends JFrame {
 		return pn;
 	}
 	
+	public void setPn(String pn) {
+		this.pn = pn;
+	}
+
 	public List<String> listarPalavrasNegativas() {
 		return Arrays.asList(pn.split(","));
 	}
@@ -239,6 +246,8 @@ public class GUI extends JFrame {
 			@SuppressWarnings("unlikely-arg-type")
 			public void actionPerformed(ActionEvent e) {
 				setTexto(editorPane.getText().toLowerCase());
+				String palNeg = txtPalavrasNegativas.getText().replaceAll(", ", ",");
+				setPn(getPn() + "," + palNeg);
 				List<String> listaDePalavras = Arrays.asList(getTexto().split(" "));
 				
 				for (int a = 0; a < listaDePalavras.size(); a++) {
@@ -249,6 +258,8 @@ public class GUI extends JFrame {
 					todosCaractersAlfabeticos = saoTodosAlfabeticos(quantidadeCaracteresPalavra, todosCaractersAlfabeticos, palavra);
 					if (todosCaractersAlfabeticos) {
 						if (!listarPalavrasNegativas().contains(palavra)) {// Procurar no dicionário a palavra, se tiver, encontrar a lista de palavras sinônimas
+							listarPalavrasNegativas().forEach(System.out::println);
+							
 							List<String> listaDeSinonimos = gerarListaSinonimos(palavra);
 							
 							List<Vocabulo> subListaVocabulos = new ArrayList<>();
@@ -310,6 +321,12 @@ public class GUI extends JFrame {
 		editorPane = new JEditorPane();
 		editorPane.addMouseListener(new PopClickListener());
 		scrollPane.setViewportView(editorPane);
+		
+		txtPalavrasNegativas = new JTextField();
+		txtPalavrasNegativas.setBackground(SystemColor.controlHighlight);
+		txtPalavrasNegativas.setToolTipText("Insira as palavras negativas separadas por virgula e um espa\u00E7o, ex: palavra1, palavra2, palavra3");
+		scrollPane.setColumnHeaderView(txtPalavrasNegativas);
+		txtPalavrasNegativas.setColumns(10);
 	}
 
 }
