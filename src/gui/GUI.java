@@ -35,6 +35,7 @@ import dao.VocabuloDao;
 import models.Vocabulo;
 
 public class GUI extends JFrame {
+
 	/**
 	 * 
 	 */
